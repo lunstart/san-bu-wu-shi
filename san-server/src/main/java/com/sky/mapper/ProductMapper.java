@@ -10,6 +10,15 @@ import java.util.List;
 @Mapper
 public interface ProductMapper {
 
+    /**
+     * 根据主键查询商品
+     *
+     * @param id
+     * @return
+     */
+    @Select("select * from product where id = #{id}")
+    Product getById(Long id);
+
 
     /**
      * 动态条件查询商品
