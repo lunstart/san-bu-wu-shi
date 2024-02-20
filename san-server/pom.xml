@@ -11,6 +11,13 @@
     <artifactId>san-server</artifactId>
     <dependencies>
 
+        <!--        npl -->
+        <dependency>
+            <groupId>com.hankcs</groupId>
+            <artifactId>hanlp</artifactId>
+            <version>portable-1.8.3</version>
+        </dependency>
+
         <dependency>
             <groupId>com.sky</groupId>
             <artifactId>san-common</artifactId>
@@ -114,6 +121,10 @@
         <dependency>
             <groupId>org.apache.poi</groupId>
             <artifactId>poi-ooxml</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
         </dependency>
     </dependencies>
 
