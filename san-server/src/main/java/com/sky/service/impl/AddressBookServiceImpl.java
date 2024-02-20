@@ -7,7 +7,6 @@ import com.sky.service.AddressBookService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -33,7 +32,9 @@ public class AddressBookServiceImpl implements AddressBookService {
      * @param addressBook
      */
     public void save(AddressBook addressBook) {
-        addressBook.setUserId(BaseContext.getCurrentId());
+        //addressBook.setUserId(BaseContext.getCurrentId());
+        //TODO
+        addressBook.setUserId(1L);
         addressBook.setIsDefault(1);
         addressBookMapper.delete(addressBook);
         addressBookMapper.insert(addressBook);

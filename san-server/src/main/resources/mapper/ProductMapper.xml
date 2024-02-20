@@ -19,7 +19,6 @@
         order by id desc
     </select>
 
-
     <select id="search" resultType="Product" parameterType="String">
         select * from product
         <where>
@@ -29,4 +28,24 @@
         </where>
         order by id desc
     </select>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        insert into product(name, category_id, price, image, description,batching,status)
+        values (#{name}, #{categoryId}, #{price}, #{image}, #{description}, #{batching},#{status})
+    </insert>
+
+    <update id="update">
+        update product
+        <set>
+            <if test="name != null">name = #{name},</if>
+            <if test="categoryId != null">category_id = #{categoryId},</if>
+            <if test="price != null">price = #{price},</if>
+            <if test="image != null">image = #{image},</if>
+            <if test="description != null">description = #{description},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="batching != null">batching = #{batching},</if>
+        </set>
+        where id = #{id}
+    </update>
+
 </mapper>

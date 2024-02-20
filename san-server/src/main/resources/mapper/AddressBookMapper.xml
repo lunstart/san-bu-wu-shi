@@ -17,29 +17,5 @@
         </where>
     </select>
 
-    <update id="update" parameterType="addressBook">
-        update address_book
-        <set>
-            <if test="consignee != null">
-                consignee = #{consignee},
-            </if>
-            <if test="sex != null">
-                sex = #{sex},
-            </if>
-            <if test="phone != null">
-                phone = #{phone},
-            </if>
-            <if test="detail != null">
-                detail = #{detail},
-            </if>
-            <if test="label != null">
-                label = #{label},
-            </if>
-            <if test="isDefault != null">
-                is_default = #{isDefault},
-            </if>
-        </set>
-        where id = #{id}
-    </update>
 
 </mapper>

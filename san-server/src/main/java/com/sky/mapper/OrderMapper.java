@@ -32,11 +32,6 @@ public interface OrderMapper {
      */
     void update(Orders orders);
 
-    /**
-     * 分页条件查询并按下单时间排序
-     * @param ordersPageQueryDTO
-     */
-    Page<Orders> pageQuery(OrdersPageQueryDTO ordersPageQueryDTO);
 
     /**
      * 根据id查询订单
@@ -53,13 +48,13 @@ public interface OrderMapper {
     Integer countStatus(Integer status);
 
     /**
-     * 根据订单状态和下单时间查询订单
+     * 根据订单状态查询订单
+     *
      * @param status
-     * @param orderTime
      * @return
      */
-    @Select("select * from orders where status = #{status} and order_time < #{orderTime}")
-    List<Orders> getByStatusAndOrderTimeLT(Integer status, LocalDateTime orderTime);
+    @Select("select * from orders where status = #{status}")
+    List<Orders> getByStatusId(Integer status);
 
     /**
      * 根据动态条件统计营业额数据
@@ -81,5 +76,5 @@ public interface OrderMapper {
      * @param end
      * @return
      */
-    List<GoodsSalesDTO> getSalesTop10(LocalDateTime begin,LocalDateTime end);
+    //List<GoodsSalesDTO> getSalesTop10(LocalDateTime begin,LocalDateTime end);
 }
