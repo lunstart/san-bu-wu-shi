@@ -34,15 +34,6 @@ public interface OrderService {
      */
     void paySuccess(String outTradeNo);
 
-    /**
-     * 用户端订单分页查询
-     *
-     * @param page
-     * @param pageSize
-     * @param status
-     * @return
-     */
-    PageResult pageQuery4User(int page, int pageSize, Integer status);
 
     /**
      * 查询订单详情
@@ -112,4 +103,11 @@ public interface OrderService {
     void cancel(Long id) throws Exception;
 
 
+    /**
+     * 历史订单查询
+     *
+     * @param status
+     * @return
+     */
+    List<OrdersDTO> historyOrders(Integer status);
 }

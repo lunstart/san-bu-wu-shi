@@ -34,8 +34,8 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         ShoppingCart shoppingCart = new ShoppingCart();
         BeanUtils.copyProperties(shoppingCartDTO, shoppingCart);
         //TODO
-        //Long userId = BaseContext.getCurrentId();
-        Long userId = 1L;
+        Long userId = BaseContext.getCurrentId();
+        //Long userId = 1L;
         shoppingCart.setUserId(userId);
 
         List<ShoppingCart> list = shoppingCartMapper.list(shoppingCart);

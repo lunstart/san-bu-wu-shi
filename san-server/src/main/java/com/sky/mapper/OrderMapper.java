@@ -1,6 +1,7 @@
 package com.sky.mapper;
 
 import com.github.pagehelper.Page;
+import com.sky.dto.OrdersDTO;
 import com.sky.entity.Orders;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
@@ -57,6 +58,14 @@ public interface OrderMapper {
     List<Orders> getByStatusId(Integer status);
 
     /**
+     *
+     *
+     * @return
+     */
+    @Select("select * from orders where user_id= #{userId} and status = #{status}")
+    List<Orders> getByStatusIdAndUserId(Long userId,Integer status);
+
+    /**
      * 根据动态条件统计营业额数据
      * @param map
      * @return
@@ -69,6 +78,9 @@ public interface OrderMapper {
      * @return
      */
     Integer countByMap(Map map);
+
+
+
 
     /**
      * 统计指定时间区间内的销量排名前10

@@ -1,5 +1,6 @@
 package com.sky.controller.user;
 
+import com.sky.dto.OrdersDTO;
 import com.sky.dto.OrdersPaymentDTO;
 import com.sky.dto.OrdersSubmitDTO;
 import com.sky.result.PageResult;
@@ -13,6 +14,9 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController("userOrderController")
 @RequestMapping("/user/order")
@@ -44,26 +48,27 @@ public class OrderController {
      */
     @PutMapping("/payment")
     @ApiOperation("订单支付")
-    public Result<OrderPaymentVO> payment(@RequestBody OrdersPaymentDTO ordersPaymentDTO) throws Exception {
-        log.info("订单支付：{}", ordersPaymentDTO);
+    public Result payment(@RequestBody OrdersPaymentDTO ordersPaymentDTO) throws Exception {
+        /*log.info("订单支付：{}", ordersPaymentDTO);
         OrderPaymentVO orderPaymentVO = orderService.payment(ordersPaymentDTO);
-        log.info("生成预支付交易单：{}", orderPaymentVO);
-        return Result.success(orderPaymentVO);
+        log.info("生成预支付交易单：{}", orderPaymentVO);*/
+        orderService.paySuccess(ordersPaymentDTO.getOrderNumber());
+        return Result.success();
     }
 
     /**
-     * 历史订单查询
+     *历史订单查询
      *
-     * @param page
-     * @param pageSize
      * @param status   订单状态 1待付款 2待接单 3已接单 4派送中 5已完成 6已取消
      * @return
      */
-    @GetMapping("/historyOrders")
+    @GetMapping("/historyOrders/{status}")
     @ApiOperation("历史订单查询")
-    public Result<PageResult> page(int page, int pageSize, Integer status) {
-        PageResult pageResult = orderService.pageQuery4User(page, pageSize, status);
-        return Result.success(pageResult);
+    public Result<List<OrdersDTO>> historyOrders(@PathVariable("status") Integer status){
+        log.info("历史订单查询：{}",status);
+        List<OrdersDTO> orders = new ArrayList<>();
+        orders = orderService.historyOrders(status);
+        return Result.success(orders);
     }
 
     /**
@@ -75,6 +80,7 @@ public class OrderController {
     @GetMapping("/orderDetail/{id}")
     @ApiOperation("查询订单详情")
     public Result<OrderVO> details(@PathVariable("id") Long id) {
+        log.info("查询订单详情：{}",id);
         OrderVO orderVO = orderService.details(id);
         return Result.success(orderVO);
     }
