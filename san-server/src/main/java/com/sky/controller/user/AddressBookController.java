@@ -31,9 +31,9 @@ public class AddressBookController {
     @ApiOperation("查询当前登录用户的地址信息")
     public Result<AddressBook> getByUserId() {
         AddressBook addressBook = new AddressBook();
-        //addressBook.setUserId(BaseContext.getCurrentId());
+        addressBook.setUserId(BaseContext.getCurrentId());
         //TODO
-        addressBook.setUserId(1L);
+        //addressBook.setUserId(1L);
         List<AddressBook> addressBooks = addressBookService.list(addressBook);
         if (addressBooks.size() <= 0 || addressBooks == null) {
             return null;

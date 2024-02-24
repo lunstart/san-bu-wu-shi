@@ -23,6 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -72,8 +73,9 @@ public class OrderServiceImpl implements OrderService {
         //checkOutOfRange(addressBook.getCityName() + addressBook.getDistrictName() + addressBook.getDetail());
 
         //查询当前用户的购物车数据
+        //TODO
         Long userId = BaseContext.getCurrentId();
-
+        //Long userId = 1L;
         ShoppingCart shoppingCart = new ShoppingCart();
         shoppingCart.setUserId(userId);
         List<ShoppingCart> shoppingCartList = shoppingCartMapper.list(shoppingCart);
@@ -141,7 +143,7 @@ public class OrderServiceImpl implements OrderService {
         User user = userMapper.getById(userId);
 
         //调用微信支付接口，生成预支付交易单
-        JSONObject jsonObject = weChatPayUtil.pay(
+       /* JSONObject jsonObject = weChatPayUtil.pay(
                 ordersPaymentDTO.getOrderNumber(), //商户订单号
                 new BigDecimal(0.01), //支付金额，单位 元
                 "外卖订单", //商品描述
@@ -153,9 +155,9 @@ public class OrderServiceImpl implements OrderService {
         }
 
         OrderPaymentVO vo = jsonObject.toJavaObject(OrderPaymentVO.class);
-        vo.setPackageStr(jsonObject.getString("package"));
+        vo.setPackageStr(jsonObject.getString("package"));*/
 
-        return vo;
+        return null;
     }
 
     /**
@@ -165,8 +167,9 @@ public class OrderServiceImpl implements OrderService {
      */
     public void paySuccess(String outTradeNo) {
         // 当前登录用户id
-        Long userId = BaseContext.getCurrentId();
-
+        //TODO
+        //Long userId = BaseContext.getCurrentId();
+        Long userId = 1L;
         // 根据订单号查询当前用户的订单
         Orders ordersDB = orderMapper.getByNumberAndUserId(outTradeNo, userId);
 
@@ -181,14 +184,25 @@ public class OrderServiceImpl implements OrderService {
         orderMapper.update(orders);
     }
 
-    @Override
-    public PageResult pageQuery4User(int page, int pageSize, Integer status) {
-        return null;
-    }
-
-    @Override
+    /**
+     * 查询订单详情
+     *
+     * @param id
+     * @return
+     */
     public OrderVO details(Long id) {
-        return null;
+        // 根据id查询订单
+        Orders orders = orderMapper.getById(id);
+
+        // 查询该订单对应的菜品/套餐明细
+        List<OrderDetail> orderDetailList = orderDetailMapper.getByOrderId(orders.getId());
+
+        // 将该订单及其详情封装到OrderVO并返回
+        OrderVO orderVO = new OrderVO();
+        BeanUtils.copyProperties(orders, orderVO);
+        orderVO.setOrderDetailList(orderDetailList);
+
+        return orderVO;
     }
 
     /**
@@ -336,7 +350,7 @@ public class OrderServiceImpl implements OrderService {
         List<Orders> orders = orderMapper.getByStatusId(status);
         List<OrdersDTO> ordersDTOs = new ArrayList<OrdersDTO>();
         List<OrderDetail> orderDetails = new ArrayList<>();
-        for(Orders order:orders) {
+        for (Orders order : orders) {
             OrdersDTO ordersDTO = new OrdersDTO();
             BeanUtils.copyProperties(order, ordersDTO);
             orderDetails = orderDetailMapper.getByOrderId(order.getId());
@@ -387,6 +401,29 @@ public class OrderServiceImpl implements OrderService {
         orders.setStatus(Orders.CANCELLED);
         orders.setCancelTime(LocalDateTime.now());
         orderMapper.update(orders);
+    }
+
+    /**
+     * 历史订单查询
+     *
+     * @param status
+     * @return
+     */
+    public List<OrdersDTO> historyOrders(Integer status) {
+        List<Orders> orders = new ArrayList<Orders>();
+        List<OrdersDTO> ordersDTOs = new ArrayList<OrdersDTO>();
+        // 查询当前用户id
+        //Long userId = BaseContext.getCurrentId();
+        //
+        Long userId = 1L;
+        orders = orderMapper.getByStatusIdAndUserId(userId, status);
+        for (Orders order:orders) {
+            OrdersDTO orderDTO = new OrdersDTO();
+            BeanUtils.copyProperties(order,orderDTO);
+            orderDTO.setOrderDetails(orderDetailMapper.getByOrderId(order.getId()));
+            ordersDTOs.add(orderDTO);
+        }
+        return ordersDTOs;
     }
 
 }

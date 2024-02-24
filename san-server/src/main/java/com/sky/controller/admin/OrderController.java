@@ -34,7 +34,7 @@ public class OrderController {
      * @param status
      * @return
      */
-    @GetMapping("/status")
+    @GetMapping("/status/{status}")
     @ApiOperation("根据订单状态查询")
     public Result<List<OrdersDTO>> getByStatusId(@PathVariable("status") Integer status){
         List<OrdersDTO> orders = new ArrayList<>();
